@@ -3,7 +3,6 @@ import * as React from 'react'
 
 export default class ChildWrapper extends React.PureComponent {
   public static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps.children.length)
     return null
   }
 
