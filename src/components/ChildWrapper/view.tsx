@@ -9,7 +9,7 @@ export default class ChildWrapper extends React.PureComponent {
 
   public render() {
     return (
-      <g className="childWrapper" transform="matrix(1 0 0 1 80 60)">
+      <g className="childWrapper" transform="matrix(1 0 0 1 100 0)">
         {this.props.children}
       </g>
     )

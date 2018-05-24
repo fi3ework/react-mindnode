@@ -5,20 +5,36 @@ interface IOpt{
   isRoot: boolean;
 }
 
+interface IPoint{
+  x: number;
+  y: number;
+}
+
 class NodeModel {
   @observable public text: string = 'example'
-  @observable public parentID: string
+  @observable public parent: NodeModel
   @observable public childs: NodeModel[] = []
   @observable public isRoot: boolean = false
-  private ID: string
+  public centerPos: {x: number; y: number}
+  private ID: string = genUID()
 
   public constructor(opt: IOpt = { isRoot: false }) {
     this.isRoot = opt.isRoot
   }
 
+  public setCenter = (pos: IPoint): void => {
+    this.centerPos = pos
+  }
+
+  public getParenetCenter = (): IPoint => {
+    return this.parent.centerPos
+  }
+
   @action
   public addChild = (): void => {
-    this.childs.push(new NodeModel())
+    const childNode = new NodeModel()
+    childNode.parent = this
+    this.childs.push(childNode)
   }
 
   @action
