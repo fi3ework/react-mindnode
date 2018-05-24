@@ -3,10 +3,8 @@ import { observer } from 'mobx-react'
 import NodeModel from '../../models/nodeModel'
 import AddChildHandle from './AddChildHandle'
 import { action } from 'mobx'
-import * as style from './style.scss'
 import ChildWrapper from '../ChildWrapper'
 import cs from 'classnames'
-import ContentEditable from 'react-contenteditable'
 
 interface IProps {
   store: NodeModel;
@@ -22,11 +20,11 @@ class Node extends React.Component<IProps> {
 
   public render() {
     return (
-      <div className={style.nodeWrapper}>
-        <ContentEditable
-          className={style.conetent}
-          onChange={this.onEdit}
-        />
+      <g className="node">
+        <rect x="10" y="10" width="80" height="30" fill="transparent" stroke="black" rx="6" ry="6" />
+        <text x="20" y="30">
+          {this.props.store.text}
+        </text>
         <ChildWrapper>
           {
             this.props.store.childs.map((child, index) => {
@@ -35,7 +33,7 @@ class Node extends React.Component<IProps> {
           }
         </ChildWrapper>
         <AddChildHandle addChildHandler={this.props.store.addChild} />
-      </div>
+      </g>
     )
   }
 }

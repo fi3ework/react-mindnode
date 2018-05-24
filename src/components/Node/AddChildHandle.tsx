@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as style from './style.scss'
 
 export interface IProps{
   addChildHandler: () => void;
@@ -12,9 +11,11 @@ export default class AddChildHandle extends React.PureComponent<IProps> {
 
   public render() {
     return (
-      <div className={style.addChildHandle} onClick={this.onClick}>
+      <g transform="matrix(1 0 0 1 90 30)">
+        <text onClick={this.onClick}>
         ＋
-      </div>
+        </text>
+      </g>
     )
   }
 }

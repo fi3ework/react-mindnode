@@ -1,1 +1,1 @@
-export const childWrapper: string;
+export const wrapper: string;
