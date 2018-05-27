@@ -1,10 +1,12 @@
 import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import { observer } from 'mobx-react'
 import NodeModel from '../../models/nodeModel'
 import AddChildHandle from './AddChildHandle'
 import { action } from 'mobx'
 import ChildWrapper from '../ChildWrapper'
 import LinkLine from '../LinkLine'
+import EditbaleText from '../EditableText'
 
 interface IProps {
   store: NodeModel;
@@ -16,11 +18,12 @@ interface IState {
   isMoved: boolean;
   moveOffset: {x: number; y: number};
   prevTranform: {x: number; y: number};
-  startDraggingPoint: {x: number; y: number};
+  startDraggingPoint: { x: number; y: number };
 }
 
 @observer
 class Node extends React.Component<IProps, IState> {
+
   public state = {
     isDragging: false,
     isMoved: false,
@@ -28,6 +31,7 @@ class Node extends React.Component<IProps, IState> {
     prevTranform: { x: 0, y: 0 },
     startDraggingPoint: { x: 0, y: 0 },
   }
+  private node: any;
 
   @action
   public onEdit = (e) => {
@@ -35,7 +39,7 @@ class Node extends React.Component<IProps, IState> {
   }
 
   public componentDidMount() {
-    console.log('cdm')
+    console.log(111)
   }
 
   public onMouseDown = (e) => {
@@ -70,6 +74,14 @@ class Node extends React.Component<IProps, IState> {
     })
   }
 
+  public getTransform = () => {
+    return {
+      x: this.state.moveOffset.x,
+      y: this.state.moveOffset.y
+    }
+  }
+
+
   public render() {
     return (
       <g
@@ -77,6 +89,7 @@ class Node extends React.Component<IProps, IState> {
         transform={`matrix(1 0 0 1 ${this.state.moveOffset.x} ${this.state.moveOffset.y})`}
         onMouseDown={this.onMouseDown}
         onMouseUp={this.onMouseUp}
+        ref={this.node}
       >
         <rect
           x="0"
@@ -87,11 +100,12 @@ class Node extends React.Component<IProps, IState> {
           stroke="black"
           rx="6"
           ry="6"
-
         />
-        <text x="10" y="20">
-          {this.props.store.text}
-        </text>
+        <EditbaleText
+          x="10"
+          y="20"
+          initValue={this.props.store.text}
+        />
         <ChildWrapper>
           {
             this.props.store.childs.map((child, index) => {
@@ -99,7 +113,7 @@ class Node extends React.Component<IProps, IState> {
             })
           }
         </ChildWrapper>
-        <LinkLine x1={-this.state.moveOffset.x} y1={-this.state.moveOffset.y} x2={0} y2={0} />
+        {/* {this.props.store.isRoot ? null : <LinkLine x1={-this.state.moveOffset.x} y1={-this.state.moveOffset.y} x2={0} y2={0} />} */}
         <AddChildHandle addChildHandler={this.props.store.addChild} />
       </g>
     )

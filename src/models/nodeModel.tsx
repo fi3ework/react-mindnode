@@ -15,7 +15,7 @@ class NodeModel {
   @observable public parent: NodeModel
   @observable public childs: NodeModel[] = []
   @observable public isRoot: boolean = false
-  public centerPos: {x: number; y: number}
+  public centerPos: { x: number; y: number }
   private ID: string = genUID()
 
   public constructor(opt: IOpt = { isRoot: false }) {
