@@ -17,7 +17,9 @@ module.exports = {
       "error",
       "never"
     ],
+    "react/no-danger-with-children": "off",
     "no-console": "off",
+    "no-return-assign": "off",
     "no-unused-vars": [
       "warn",
       {

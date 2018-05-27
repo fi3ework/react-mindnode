@@ -16,6 +16,7 @@ interface IProps {
 interface IState {
   isDragging: boolean;
   isMoved: boolean;
+  textSize: {width: number; height: number};
   moveOffset: {x: number; y: number};
   prevTranform: {x: number; y: number};
   startDraggingPoint: { x: number; y: number };
@@ -27,6 +28,7 @@ class Node extends React.Component<IProps, IState> {
   public state = {
     isDragging: false,
     isMoved: false,
+    textSize: { width: 80, height: 30 },
     moveOffset: { x: 0, y: 0 },
     prevTranform: { x: 0, y: 0 },
     startDraggingPoint: { x: 0, y: 0 },
@@ -81,6 +83,11 @@ class Node extends React.Component<IProps, IState> {
     }
   }
 
+  public onEditing = (text, { width, height }) => {
+    this.setState({
+      textSize: { width, height }
+    })
+  }
 
   public render() {
     return (
@@ -94,8 +101,8 @@ class Node extends React.Component<IProps, IState> {
         <rect
           x="0"
           y="0"
-          width="80"
-          height="30"
+          width={this.state.textSize.width}
+          height={this.state.textSize.height}
           fill="transparent"
           stroke="black"
           rx="6"
@@ -104,6 +111,7 @@ class Node extends React.Component<IProps, IState> {
         <EditbaleText
           x="10"
           y="20"
+          onChangeText={this.onEditing}
           initValue={this.props.store.text}
         />
         <ChildWrapper>

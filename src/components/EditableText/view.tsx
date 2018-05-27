@@ -1,14 +1,17 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-
-export interface IProps{
+import ContentEditable from '../ContentEditable'
+/* tslint:enable */
+const ContentEditableJSX: any = ContentEditable
+/* tslint:enable */
+export interface IProps {
   x: string;
   y: string;
   initValue: string;
   onChangeText?: any;
 }
 
-interface IState{
+interface IState {
   isEditing: boolean;
   textX: number;
   textY: number;
@@ -18,7 +21,6 @@ interface IState{
 }
 
 export default class EditableText extends React.Component<IProps, IState> {
-
   public state = {
     isEditing: false,
     textHeight: 0,
@@ -29,16 +31,6 @@ export default class EditableText extends React.Component<IProps, IState> {
   }
   private textRef: any
   private inputRef: any
-
-  public onEndEditing = (e) => {
-    console.log(e.target)
-    if (e.target && e.target !== this.inputRef) {
-      document.removeEventListener('mousedown', this.onEndEditing)
-      this.setState({
-        isEditing: false
-      })
-    }
-  }
 
   public onDoubleClick = () => {
     console.log('onDoubleClick')
@@ -53,37 +45,53 @@ export default class EditableText extends React.Component<IProps, IState> {
     document.addEventListener('mousedown', this.onEndEditing)
   }
 
-  public handleChangeText = (e) => {
+  public onChangeText = (e) => {
     const currText = e.target.value
+    const rect = this.textRef.getBoundingClientRect()
     this.setState({
-      value: currText
+      value: currText,
+      textWidth: rect.width,
+      textHeight: rect.height,
     })
-    console.log('inputing...' + currText)
     if (typeof this.props.onChangeText === 'function') {
-      this.props.onChangeText()
+      this.props.onChangeText(currText, { width: rect.width, height: rect.height })
     }
   }
+
+  public onEndEditing = (e) => {
+    console.log(e.target)
+    console.log(this.inputRef)
+    if (e.target && e.target !== this.inputRef) {
+      console.log('ending...')
+      document.removeEventListener('mousedown', this.onEndEditing)
+      this.setState({
+        isEditing: false
+      })
+    }
+  }
+
+  public getRef = (ref) => { this.inputRef = ref }
+
 
   public render() {
     return (
       <React.Fragment>
-        {
-          this.state.isEditing ? null :
-          <text
-            ref={ref => { this.textRef = ref }}
-            x="10" y="20"
-            onDoubleClick={this.onDoubleClick}
-          >
-            {this.state.value}
-          </text>
-        }
+        <text
+          x="10" y="20"
+          ref={ref => { this.textRef = ref }}
+          onDoubleClick={this.onDoubleClick}
+          opacity={this.state.isEditing ? 0 : 1}
+        >
+          {this.state.value}
+        </text>
         {
           this.state.isEditing ?
             ReactDOM.createPortal(
-              <input
-                ref={ref => { this.inputRef = ref }}
-                value={this.state.value}
-                type="text"
+              <ContentEditableJSX
+                internalRef={this.getRef}
+                disabled={false}
+                onChange={this.onChangeText}
+                html={this.state.value}
                 style={{
                   position: 'absolute',
                   outline: 'none',
@@ -92,7 +100,6 @@ export default class EditableText extends React.Component<IProps, IState> {
                   width: Math.max(30, this.state.textWidth),
                   height: this.state.textHeight
                 }}
-                onChange={this.handleChangeText}
               />, document.body) : null
         }
       </React.Fragment>
