@@ -59,8 +59,8 @@ export default class EditableText extends React.Component<IProps, IState> {
   }
 
   public onEndEditing = (e) => {
-    console.log(e.target)
-    console.log(this.inputRef)
+    // console.log(e.target)
+    // console.log(this.inputRef)
     if (e.target && e.target !== this.inputRef) {
       console.log('ending...')
       document.removeEventListener('mousedown', this.onEndEditing)

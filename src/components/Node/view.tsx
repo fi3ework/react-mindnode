@@ -85,7 +85,7 @@ class Node extends React.Component<IProps, IState> {
 
   public onEditing = (text, { width, height }) => {
     this.setState({
-      textSize: { width, height }
+      textSize: { width, height: this.state.textSize.height }
     })
   }
 
